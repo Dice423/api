@@ -13,7 +13,7 @@
       "name": "BSD License 2.0",
       "url": "https://github.com/Bungie-net/api/blob/master/LICENSE"
     },
-    "version": "2.21.7"
+    "version": "2.21.8"
   },
   "servers": [
     {
@@ -9500,7 +9500,8 @@
           "2",
           "4",
           "8",
-          "16"
+          "16",
+          "32"
         ],
         "type": "integer",
         "description": "A flags enumeration/bitmask where each bit represents a different possible state that the item can be in that may effect how the item is displayed to the user and what actions can be performed against it.",
@@ -9534,6 +9535,11 @@
             "numericValue": "16",
             "identifier": "HighlightedObjective",
             "description": "If this bit is set, the item has a 'highlighted' objective. You may want to represent this with an orange-red icon border color."
+          },
+          {
+            "numericValue": "32",
+            "identifier": "Enhanced",
+            "description": "If this bit is set, the item has been 'enhanced' by the player."
           }
         ],
         "x-enum-is-bitmask": true
@@ -13891,6 +13897,24 @@
             },
             "description": "A list of location mappings that are affected by this activity. Pulled out of DestinyLocationDefinitions for our/your lookup convenience."
           },
+          "curatorBlockDefinition": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Destiny.Definitions.DestinyActivityCuratorBlockDefinition"
+              }
+            ],
+            "description": "Additional data used for display in the in-game Portal screen"
+          },
+          "durationEstimate": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Destiny.Definitions.DestinyActivityDurationEstimate"
+              }
+            ],
+            "description": "Optional estimated duration, shown on the Portal tiles"
+          },
           "hash": {
             "type": "integer",
             "description": "The unique identifier for this entity. Guaranteed to be unique for the type of entity, but not globally.\r\nWhen entities refer to each other in Destiny content, it is this hash that they are referring to.",
@@ -15610,6 +15634,39 @@
           }
         }
       },
+      "Destiny.Definitions.DestinyActivityCuratorBlockDefinition": {
+        "type": "object",
+        "properties": {
+          "quickplaySortPriority": {
+            "type": "integer",
+            "description": "Sort order",
+            "format": "int32"
+          },
+          "quickplaySortToFront": {
+            "type": "boolean",
+            "description": "Whether this activity should be sorted to the front of the Portal category"
+          }
+        }
+      },
+      "Destiny.Definitions.DestinyActivityDurationEstimate": {
+        "type": "object",
+        "properties": {
+          "durationPipsFilledCount": {
+            "type": "integer",
+            "description": "The number of filled pips shown on the Portal tile",
+            "format": "int32"
+          },
+          "durationPipsTotalCount": {
+            "type": "integer",
+            "description": "The total number of pips shown on the Portal tile",
+            "format": "int32"
+          },
+          "durationEstimateText": {
+            "type": "string",
+            "description": "The text string showing the estimated time to complete this activity"
+          }
+        }
+      },
       "Destiny.Definitions.DestinyPlaceDefinition": {
         "type": "object",
         "properties": {
@@ -15850,9 +15907,6 @@
             "items": {
               "$ref": "#/components/schemas/Destiny.Definitions.Activities.DestinyActivitySkull"
             }
-          },
-          "tierEnabledUnlockExpression": {
-            "$ref": "#/components/schemas/Destiny.Definitions.DestinyUnlockExpressionDefinition"
           },
           "tierType": {
             "type": "integer",
@@ -16214,21 +16268,6 @@
         },
         "x-mobile-manifest-name": "ActivitySelectableSkullExclusionGroups"
       },
-      "Destiny.Definitions.DestinyUnlockExpressionDefinition": {
-        "type": "object",
-        "properties": {
-          "scope": {
-            "type": "integer",
-            "description": "A shortcut for determining the most restrictive gating that this expression performs. See the DestinyGatingScope enum's documentation for more details.",
-            "format": "int32",
-            "x-enum-reference": {
-              "$ref": "#/components/schemas/Destiny.DestinyGatingScope"
-            },
-            "x-enum-is-bitmask": false
-          }
-        },
-        "description": "Where the sausage gets made. Unlock Expressions are the foundation of the game's gating mechanics and investment-related restrictions. They can test Unlock Flags and Unlock Values for certain states, using a sufficient amount of logical operators such that unlock expressions are effectively Turing complete.\r\nUse UnlockExpressionParser to evaluate expressions using an IUnlockContext parsed from Babel."
-      },
       "Destiny.DestinyActivityDifficultyTierType": {
         "enum": [
           "0",
@@ -16512,9 +16551,6 @@
           },
           "name": {
             "type": "string"
-          },
-          "unlockExpression": {
-            "$ref": "#/components/schemas/Destiny.Definitions.DestinyUnlockExpressionDefinition"
           },
           "linkedGraphId": {
             "type": "integer",
@@ -32461,6 +32497,28 @@
             },
             "description": "The list of activity interactables that the player can interact with."
           },
+          "difficultyTierCollections": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Destiny.DestinyActivityDifficultyTierCollectionComponent"
+            },
+            "description": "The activity difficulty tier states for this character.",
+            "x-dictionary-key": {
+              "type": "integer",
+              "format": "uint32"
+            }
+          },
+          "selectableSkullCollections": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Destiny.DestinyActivitySelectableSkullCollectionComponent"
+            },
+            "description": "The selectable activity skulls states for this character.",
+            "x-dictionary-key": {
+              "type": "integer",
+              "format": "uint32"
+            }
+          },
           "currentActivityHash": {
             "type": "integer",
             "description": "If the user is in an activity, this will be the hash of the Activity being played. Note that you must combine this info with currentActivityModeHash to get a real picture of what the user is doing right now. For instance, PVP \"Activities\" are just maps: it's the ActivityMode that determines what type of PVP game they're playing.",
@@ -32624,6 +32682,10 @@
               "$ref": "#/components/schemas/Destiny.Definitions.DestinyActivityRewardMapping"
             },
             "description": "A filtered list of reward mappings with only the currently visible reward items."
+          },
+          "isFocusedActivity": {
+            "type": "boolean",
+            "description": "Whether or not this activity is currently in the \"featured\" carousel of the Portal"
           }
         },
         "description": "Represents the \"Live\" data that we can obtain about a Character's status with a specific Activity. This will tell you whether the character can participate in the activity, as well as some other basic mutable information. \r\nMeant to be combined with static DestinyActivityDefinition data for a full picture of the Activity."
@@ -32789,6 +32851,73 @@
           }
         },
         "description": "Defines a specific interactable and the action that can occur when triggered."
+      },
+      "Destiny.DestinyActivityDifficultyTierCollectionComponent": {
+        "type": "object",
+        "properties": {
+          "difficultyTierCollectionHash": {
+            "type": "integer",
+            "format": "uint32",
+            "x-mapped-definition": {
+              "$ref": "#/components/schemas/Destiny.Definitions.Activities.DestinyActivityDifficultyTierCollectionDefinition"
+            }
+          },
+          "difficultyTiers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Destiny.DestinyActivityDifficultyTierComponent"
+            }
+          }
+        }
+      },
+      "Destiny.DestinyActivityDifficultyTierComponent": {
+        "type": "object",
+        "properties": {
+          "difficultyTierIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fixedActivitySkulls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Destiny.DestinyActivitySkullComponent"
+            }
+          }
+        }
+      },
+      "Destiny.DestinyActivitySkullComponent": {
+        "type": "object",
+        "properties": {
+          "hash": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "skullIdentifierHash": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "isEnabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Destiny.DestinyActivitySelectableSkullCollectionComponent": {
+        "type": "object",
+        "properties": {
+          "selectableSkullCollectionHash": {
+            "type": "integer",
+            "format": "uint32",
+            "x-mapped-definition": {
+              "$ref": "#/components/schemas/Destiny.Definitions.Activities.DestinyActivitySelectableSkullCollectionDefinition"
+            }
+          },
+          "selectableSkulls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Destiny.DestinyActivitySkullComponent"
+            }
+          }
+        }
       },
       "DictionaryComponentResponseOfint64AndDestinyCharacterActivitiesComponent": {
         "type": "object",

@@ -6,6 +6,10 @@ Documentation as one single, gigantic page: https://bungie-net.github.io
 
 This section will be added to as time goes by - we're working with it as we go!
 
+## 2025-10-14 Update for Portal Activities
+- Added `curatorBlockDefinition` and `durationEstimate` to `DestinyActivityDefinition`.
+- Added `difficultyTierCollections` and `selectableSkullCollections` to `DestinyCharacterActivitiesComponent`.
+
 ## 2025-09-26 Nullable Enum Properties
 - Updated nullable enum type properties to reference the enum definitions, rather than redefining them.
 
