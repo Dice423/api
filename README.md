@@ -6,6 +6,10 @@ Documentation as one single, gigantic page: https://bungie-net.github.io
 
 This section will be added to as time goes by - we're working with it as we go!
 
+## 2025-11-18 Portal Root Nodes and enum value fixes 
+- Added `portalActivityGraphRootNodesWithIcons` to `DestinyGlobalConstantsDefinition` to assist Portal representation.
+- Fix enum values being when Strings when intended to be Integers.
+
 ## 2025-10-14 Update for Portal Activities
 - Added `curatorBlockDefinition` and `durationEstimate` to `DestinyActivityDefinition`.
 - Added `difficultyTierCollections` and `selectableSkullCollections` to `DestinyCharacterActivitiesComponent`.
