@@ -17851,7 +17851,8 @@
         89,
         90,
         91,
-        92
+        92,
+        93
       ],
       "type": "integer",
       "x-enum-values": [
@@ -18195,6 +18196,10 @@
         {
           "numericValue": 92,
           "identifier": "Relic"
+        },
+        {
+          "numericValue": 93,
+          "identifier": "LawlessFrontier"
         }
       ]
     },
@@ -25955,7 +25960,15 @@
         4006,
         4007,
         4008,
-        4009
+        4009,
+        5000,
+        5001,
+        5002,
+        5003,
+        5004,
+        5005,
+        5006,
+        5007
       ],
       "type": "integer",
       "x-enum-values": [
@@ -29559,6 +29572,38 @@
         {
           "numericValue": 4009,
           "identifier": "ErrorEgsJwtMalformedPayload"
+        },
+        {
+          "numericValue": 5000,
+          "identifier": "MarathonInternalError"
+        },
+        {
+          "numericValue": 5001,
+          "identifier": "MarathonBabelConnectionTimeout"
+        },
+        {
+          "numericValue": 5002,
+          "identifier": "MarathonServiceFailure"
+        },
+        {
+          "numericValue": 5003,
+          "identifier": "MarathonInvalidRequest"
+        },
+        {
+          "numericValue": 5004,
+          "identifier": "MarathonUnexpectedError"
+        },
+        {
+          "numericValue": 5005,
+          "identifier": "MarathonAccountNotFound"
+        },
+        {
+          "numericValue": 5006,
+          "identifier": "MarathonThrottledByGameServer"
+        },
+        {
+          "numericValue": 5007,
+          "identifier": "MarathonErrorDeserializationFailure"
         }
       ]
     },
@@ -31518,6 +31563,16 @@
         "rewardProgressionHash": {
           "format": "uint32",
           "type": "integer",
+          "x-mapped-definition": {
+            "$ref": "#/definitions/Destiny.Definitions.DestinyProgressionDefinition"
+          }
+        },
+        "rewardProgressionHashList": {
+          "type": "array",
+          "items": {
+            "format": "uint32",
+            "type": "integer"
+          },
           "x-mapped-definition": {
             "$ref": "#/definitions/Destiny.Definitions.DestinyProgressionDefinition"
           }
@@ -33629,6 +33684,14 @@
               "$ref": "#/definitions/Destiny.Artifacts.DestinyArtifactCharacterScoped"
             }
           ]
+        },
+        "unclaimedOrderRewards": {
+          "description": "Unclaimed rewards earned by completing Orders.",
+          "type": "object",
+          "additionalProperties": {
+            "format": "int32",
+            "type": "integer"
+          }
         }
       },
       "x-destiny-component-type-dependency": "CharacterProgressions"
@@ -42775,6 +42838,19 @@
           }
         },
         "portalActivityGraphRootNodesWithIcons": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "orderRewardsUnlockValueHashesToRewardItemHashes": {
+          "type": "object",
+          "additionalProperties": {
+            "format": "uint32",
+            "type": "integer"
+          }
+        },
+        "questItemTraitToFeaturedQuestImagePath": {
           "type": "object",
           "additionalProperties": {
             "type": "string"

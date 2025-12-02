@@ -14835,7 +14835,8 @@
           89,
           90,
           91,
-          92
+          92,
+          93
         ],
         "type": "integer",
         "description": "For historical reasons, this list will have both D1 and D2-relevant Activity Modes in it. Please don't take this to mean that some D1-only feature is coming back!",
@@ -15181,6 +15182,10 @@
           {
             "numericValue": 92,
             "identifier": "Relic"
+          },
+          {
+            "numericValue": 93,
+            "identifier": "LawlessFrontier"
           }
         ],
         "x-enum-is-bitmask": false
@@ -23149,7 +23154,15 @@
           4006,
           4007,
           4008,
-          4009
+          4009,
+          5000,
+          5001,
+          5002,
+          5003,
+          5004,
+          5005,
+          5006,
+          5007
         ],
         "type": "integer",
         "format": "int32",
@@ -26754,6 +26767,38 @@
           {
             "numericValue": 4009,
             "identifier": "ErrorEgsJwtMalformedPayload"
+          },
+          {
+            "numericValue": 5000,
+            "identifier": "MarathonInternalError"
+          },
+          {
+            "numericValue": 5001,
+            "identifier": "MarathonBabelConnectionTimeout"
+          },
+          {
+            "numericValue": 5002,
+            "identifier": "MarathonServiceFailure"
+          },
+          {
+            "numericValue": 5003,
+            "identifier": "MarathonInvalidRequest"
+          },
+          {
+            "numericValue": 5004,
+            "identifier": "MarathonUnexpectedError"
+          },
+          {
+            "numericValue": 5005,
+            "identifier": "MarathonAccountNotFound"
+          },
+          {
+            "numericValue": 5006,
+            "identifier": "MarathonThrottledByGameServer"
+          },
+          {
+            "numericValue": 5007,
+            "identifier": "MarathonErrorDeserializationFailure"
           }
         ],
         "x-enum-is-bitmask": false
@@ -28792,6 +28837,16 @@
             "type": "integer",
             "format": "uint32",
             "nullable": true,
+            "x-mapped-definition": {
+              "$ref": "#/components/schemas/Destiny.Definitions.DestinyProgressionDefinition"
+            }
+          },
+          "rewardProgressionHashList": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint32"
+            },
             "x-mapped-definition": {
               "$ref": "#/components/schemas/Destiny.Definitions.DestinyProgressionDefinition"
             }
@@ -31089,6 +31144,18 @@
               }
             ],
             "description": "Data related to your progress on the current season's artifact that can vary per character."
+          },
+          "unclaimedOrderRewards": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Unclaimed rewards earned by completing Orders.",
+            "x-dictionary-key": {
+              "type": "integer",
+              "format": "uint32"
+            }
           }
         },
         "description": "This component returns anything that could be considered \"Progression\" on a user: data where the user is gaining levels, reputation, completions, rewards, etc...",
@@ -40883,6 +40950,27 @@
             }
           },
           "portalActivityGraphRootNodesWithIcons": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "x-dictionary-key": {
+              "type": "integer",
+              "format": "uint32"
+            }
+          },
+          "orderRewardsUnlockValueHashesToRewardItemHashes": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "format": "uint32"
+            },
+            "x-dictionary-key": {
+              "type": "integer",
+              "format": "uint32"
+            }
+          },
+          "questItemTraitToFeaturedQuestImagePath": {
             "type": "object",
             "additionalProperties": {
               "type": "string"

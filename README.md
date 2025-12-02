@@ -6,6 +6,10 @@ Documentation as one single, gigantic page: https://bungie-net.github.io
 
 This section will be added to as time goes by - we're working with it as we go!
 
+## 2025-12-02 Update for Renegades 
+- Added `unclaimedOrderRewards` and `orderRewardsUnlockValueHashesToRewardItemHashes` to offer a method of getting the number of type of earned, unclaimed rewards from Orders. 
+- Added images for Featured Quests. 
+
 ## 2025-11-18 Portal Root Nodes and enum value fixes 
 - Added `portalActivityGraphRootNodesWithIcons` to `DestinyGlobalConstantsDefinition` to assist Portal representation.
 - Fix enum values being when Strings when intended to be Integers.
